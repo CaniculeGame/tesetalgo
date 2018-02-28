@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.test">
+	<uses-sdk android:minSdkVersion="20" />
+
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
+  <application android:label="test.Android">
+
+    <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBSHCE2ZT8cSwr-4Y7kyOyjwszqXu7sv80" />
+    
+  </application>
+</manifest>

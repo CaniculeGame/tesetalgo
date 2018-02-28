@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:test"					
+             x:Class="test.MainPage">
+
+
+    <StackLayout BackgroundColor="Black">
+
+        
+        <Label x:Name="MyLabel" Text="Ca marche !!" HorizontalTextAlignment="Center"/>
+
+        <local:CustomMap x:Name="MyMap" MapType="Street"/>
+
+        <Slider x:Name="MySliderZoom" Maximum="1000" Minimum="10"  Value="300" />
+        <Label x:Name="MyLabelSlider" Text="0" TextColor="Red" HorizontalTextAlignment="Center"/>
+        
+        <Slider x:Name="MySliderLat"  Maximum="0.1" Minimum="-0.10"  Value="0" />
+        <Slider x:Name="MySliderLong" Maximum="0.1" Minimum="-0.10"  Value="0" />
+
+        <Button x:Name="MyReinitButton" Text="Reinit"/>
+        <Button x:Name="MyPinButton" Text="Add Pin"/>
+
+    </StackLayout>
+    
+</ContentPage>
