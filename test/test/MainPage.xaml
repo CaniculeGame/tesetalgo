@@ -10,7 +10,7 @@
         
         <Label x:Name="MyLabel" Text="Ca marche !!" HorizontalTextAlignment="Center"/>
 
-        <local:CustomMap x:Name="MyMap" MapType="Street"/>
+       <!-- <local:CustomMap x:Name="MyMap" MapType="Street"/>
 
         <Slider x:Name="MySliderZoom" Maximum="1000" Minimum="10"  Value="300" />
         <Label x:Name="MyLabelSlider" Text="0" TextColor="Red" HorizontalTextAlignment="Center"/>
@@ -19,7 +19,16 @@
         <Slider x:Name="MySliderLong" Maximum="0.1" Minimum="-0.10"  Value="0" />
 
         <Button x:Name="MyReinitButton" Text="Reinit"/>
-        <Button x:Name="MyPinButton" Text="Add Pin"/>
+        <Button x:Name="MyPinButton" Text="Add Pin"/> -->
+
+        <Label x:Name="LabelIpServer" Text="Mon address IP " TextColor="WhiteSmoke" />
+        <Entry x:Name="IpTextServer" Text="enter ip" TextColor="WhiteSmoke"/>
+        <Button x:Name="ServerButton" Text="Demarrer Server"/>
+
+
+        <Label x:Name="LabelIpClient" Text="Addresse  IP du Server a Rejoindre" TextColor="WhiteSmoke" />
+        <Entry x:Name="IpTextClient" Text="entrer ip" TextColor="WhiteSmoke"/>
+        <Button x:Name="ClientButton" Text="Rejoindre"/>
 
     </StackLayout>
     

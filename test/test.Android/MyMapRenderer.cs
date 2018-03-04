@@ -9,20 +9,19 @@ using test;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.Android;
-using Android.Views;
-using Android;
-using Android.Util;
-
+using Android.Locations;
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(test.droid.MyMapRenderer))]
 namespace test.droid
 {
     class MyMapRenderer : MapRenderer, GoogleMap.IInfoWindowAdapter
     {
-        List<CustomPin> customPins;
-        GoogleMap map = null;
-        Bitmap bmp = null;
-        Bitmap resizedBitmap = null;
+        private List<CustomPin> customPins;
+        private GoogleMap map = null;
+        private Bitmap bmp = null;
+        private Bitmap resizedBitmap = null;
+        private readonly static double ERROR_VALUE_LATLONG = 200;
+        private readonly Vec2 ERROR_VALUE_VEC_LATLONG = new Vec2(ERROR_VALUE_LATLONG, ERROR_VALUE_LATLONG);
 
         public MyMapRenderer(Context context) : base(context)
         {
@@ -95,6 +94,60 @@ namespace test.droid
         {
             base.OnElementPropertyChanged(sender, e);
             Refresh(map);
+
+            //temporaire: affichage de ligne 
+            try
+            {
+
+               /* Vec2 E = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Southwest.Latitude , map.Projection.VisibleRegion.LatLngBounds.Northeast.Longitude );
+                Vec2 F = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Northeast.Latitude , map.Projection.VisibleRegion.LatLngBounds.Northeast.Longitude );
+                Vec2 G = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Northeast.Latitude , map.Projection.VisibleRegion.LatLngBounds.Southwest.Longitude );
+                Vec2 H = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Southwest.Latitude , map.Projection.VisibleRegion.LatLngBounds.Southwest.Longitude );
+                PolygonOptions polygonOption = new PolygonOptions();
+                polygonOption.Add(new LatLng(E.X,E.Y), new LatLng(F.X, F.Y), new LatLng(G.X, G.Y), new LatLng(H.X, H.Y));
+
+                polygonOption.InvokeStrokeColor(Android.Graphics.Color.Orange);
+
+
+                map.AddPolygon(polygonOption);*/
+                
+
+                Vec2 E1 = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Southwest.Latitude , map.Projection.VisibleRegion.LatLngBounds.Northeast.Longitude );
+                Vec2 F1 = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Northeast.Latitude  , map.Projection.VisibleRegion.LatLngBounds.Northeast.Longitude);
+                Vec2 G1 = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Northeast.Latitude , map.Projection.VisibleRegion.LatLngBounds.Southwest.Longitude );
+                Vec2 H1 = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Southwest.Latitude , map.Projection.VisibleRegion.LatLngBounds.Southwest.Longitude );
+
+                Vec2 E2 = MovePoint(E1.X, E1.Y, 50, 315);
+                Vec2 F2 = MovePoint(F1.X, F1.Y, 50, 225);
+                Vec2 G2 = MovePoint(G1.X, G1.Y, 50, 135);
+                Vec2 H2 = MovePoint(H1.X, H1.Y, 50, 45);
+
+                PolygonOptions polygonOption1 = new PolygonOptions(); 
+                polygonOption1.Add(new LatLng(E2.X, E2.Y), new LatLng(F2.X, F2.Y), new LatLng(G2.X, G2.Y), new LatLng(H2.X, H2.Y));
+
+                polygonOption1.InvokeStrokeColor(Android.Graphics.Color.Violet);
+
+                map.AddPolygon(polygonOption1);
+                
+
+                /* PolylineOptions polyline1 = new PolylineOptions();
+                   polyline1.Add(new LatLng(0,0), new LatLng(0,0));
+                   polyline1.InvokeColor(Android.Graphics.Color.Red);
+                   polyline1.InvokeWidth(25);
+
+                   map.AddPolyline(polyline1);
+
+                   PolylineOptions polyline2 = new PolylineOptions();
+                   polyline2.Add(new LatLng(0,0), new LatLng(0,0));
+                   polyline2.InvokeColor(Android.Graphics.Color.White);
+                   polyline2.InvokeWidth(25);
+
+                   map.AddPolyline(polyline2);*/
+
+            }
+            catch(Exception exc) { }
+
+
         }
 
 
@@ -118,10 +171,9 @@ namespace test.droid
 
 
 
-
                     Position centerCameraMap = new Position(map.Projection.VisibleRegion.LatLngBounds.Center.Latitude, map.Projection.VisibleRegion.LatLngBounds.Center.Longitude);
                         //MyPin.PositionAffichage = CalculPosition(pin.Position, centerCameraMap, map.Projection.VisibleRegion.LatLngBounds);
-                    MyPin.PositionAffichage = CalculNouvellePosition(pin.Position, centerCameraMap, map.Projection.VisibleRegion.LatLngBounds);
+                    MyPin.PositionAffichage = CalculNouvellePosition(centerCameraMap, pin.Position, map.Projection.VisibleRegion.LatLngBounds,pin.Label);
 
                     Console.WriteLine(map.Projection.VisibleRegion.LatLngBounds.ToString());
 
@@ -141,6 +193,7 @@ namespace test.droid
                     CustomMarker.SetPosition(new LatLng(pin.Position.Latitude, pin.Position.Longitude));
                     CustomMarker.SetIcon(BitmapDescriptorFactory.FromBitmap(resizedBitmap));
                 }
+
                 return CustomMarker;
             }
             return null;
@@ -206,58 +259,41 @@ namespace test.droid
 
 
 
-        private Position CalculNouvellePosition(Position A, Position B, LatLngBounds zone)
+        private Position CalculNouvellePosition(Position A, Position B, LatLngBounds zone, string label)
         {
             //creation des points
-            Vec2 E = new Vec2(zone.Southwest.Latitude + 0.001, zone.Northeast.Longitude - 0.001);
-            Vec2 F = new Vec2(zone.Northeast.Latitude - 0.001, zone.Northeast.Longitude - 0.001);
-            Vec2 G = new Vec2(zone.Northeast.Latitude - 0.001, zone.Southwest.Longitude + 0.001);
-            Vec2 H = new Vec2(zone.Southwest.Latitude + 0.001, zone.Southwest.Longitude + 0.001);
-            //formation des vecteurs
-            Vec2 AB = new Vec2(A.Longitude - B.Longitude, A.Latitude - B.Latitude);
-            Vec2 BA = new Vec2(A.Latitude - B.Latitude, A.Longitude - B.Longitude);
-            Vec2 EF = new Vec2(F.X - E.X, F.Y - E.Y);
-            Vec2 FG = new Vec2(G.X - F.X, G.Y - F.Y);
-            Vec2 GH = new Vec2(H.X - G.X, H.Y - G.Y);
-            Vec2 HE = new Vec2(E.X - H.X, E.Y - H.Y);
+            Vec2 E = new Vec2(zone.Southwest.Latitude , zone.Northeast.Longitude );
+            Vec2 F = new Vec2(zone.Northeast.Latitude , zone.Northeast.Longitude );
+            Vec2 G = new Vec2(zone.Northeast.Latitude , zone.Southwest.Longitude );
+            Vec2 H = new Vec2(zone.Southwest.Latitude , zone.Southwest.Longitude );
+
+            Vec2 E2 = MovePoint(E.X, E.Y, 50, 315);
+            Vec2 F2 = MovePoint(F.X, F.Y, 50, 225);
+            Vec2 G2 = MovePoint(G.X, G.Y, 50, 135);
+            Vec2 H2 = MovePoint(H.X, H.Y, 50, 45);
+
+            float[] result = new float[3];
+            Location.DistanceBetween(E.X, E.Y, F.X, F.Y, result);
+
+            double brng = CalculateBearing(A, B);
+            double dist = result[0] / 2;
+            Vec2 newPos = MovePoint(A.Latitude, A.Longitude, dist, brng);
 
 
-            Vec2 Seg1 = new Vec2();
-            Vec2 Seg2 = new Vec2();
-            double dst1 = 0;
-            double dst2 = 0;
-            //choix du quart de l'ecran ( on doit trouvé 2 demi segment a partir du centre )
-            if (AB.X >= 0 && AB.Y >= 0)//++
-            {
-                //chercher point d'intersection avec les segments precedents
-                Seg1 = IntesectionPoints(B, A, E, F);
-                Seg2 = IntesectionPoints(B, A, F, G);
-            }
-            else if (AB.X <= 0 && AB.Y >= 0)//-+
-            {
-                Seg1 = IntesectionPoints(B, A, E, F);
-                Seg2 = IntesectionPoints(B, A, E, H);
-            }
-            else if (AB.X <= 0 && AB.Y <= 0)//--
-            {
-                Seg1 = IntesectionPoints(B, A, E, H);
-                Seg2 = IntesectionPoints(B, A, H, G);
-            }
-            else if (AB.X >= 0 && AB.Y <= 0)//+-
-            {
-                Seg1 = IntesectionPoints(B, A, H, G);
-                Seg2 = IntesectionPoints(B, A, G, F);
-            }
+            try
+                {
+                    PolylineOptions polyline = new PolylineOptions();
+                    polyline.Add(new LatLng(B.Latitude, B.Longitude), new LatLng(A.Latitude, A.Longitude));
+                    polyline.InvokeColor(Android.Graphics.Color.Black);
+                    polyline.InvokeWidth(15);
 
-            //chercher la distance entre le centre et les points trouvés
-            dst1 = Distance(BA, Seg1);
-            dst2 = Distance(BA, Seg2);
+                    map.AddPolyline(polyline);
+                }
+                catch (Exception exc)
+                { Console.WriteLine(exc); }
 
-            //prendre le plus proche et retourner la nouvelle position calculée
-            if (dst1 <= dst2)
-                return new Position(Seg1.X,Seg1.Y);
-            else
-                return new Position(Seg2.X, Seg2.Y);
+            return new Position(newPos.X, newPos.Y);
+
         }
 
 
@@ -278,7 +314,10 @@ namespace test.droid
                     ) / diviseur;
             }
 
-            return new Vec2(C.X + m * CD.X, C.Y + m * CD.Y);
+            if (m < 0 && m < 1)
+                return new Vec2(C.X + m * CD.X, C.Y + m * CD.Y);
+            else
+                return ERROR_VALUE_VEC_LATLONG;
         }
 
         private Vec2 IntesectionPoints(Position A, Position B, Vec2 C, Vec2 D)
@@ -287,6 +326,7 @@ namespace test.droid
             Vec2 CD = new Vec2(D.X - C.X, D.Y - C.Y);
 
             double m = 0;
+            double k = 0;
             double diviseur = (AB.X * CD.Y) - (AB.Y * CD.X);
 
             if (diviseur != 0)
@@ -296,10 +336,39 @@ namespace test.droid
                      - AB.Y * A.Latitude
                      + AB.Y * C.X
                     ) / diviseur;
+
+                k = (CD.X * A.Longitude
+                 - CD.X * C.Y
+                 - CD.Y * A.Latitude
+                 + CD.Y * C.X
+                ) / diviseur;
             }
 
-            return new Vec2(C.X + m * CD.X, C.Y + m * CD.Y);
+            if (k > 0 && k < 1)
+                return new Vec2(A.Latitude + k * AB.X, A.Longitude + k * AB.Y);
+            else
+                return ERROR_VALUE_VEC_LATLONG;
         }
+
+
+        private bool IntersecteLeSegment(Vec2 A, Vec2 B, Vec2 C, Vec2 D)
+        {
+            Vec2 seg = IntesectionPoints(A, B, C, D);
+            if (seg.Equals(ERROR_VALUE_VEC_LATLONG))
+                return false;
+            else
+                return true;
+        }
+
+        private bool IntersecteLeSegment(Position A, Position B, Vec2 C, Vec2 D)
+        {
+            Vec2 seg = IntesectionPoints(A, B, C, D);
+            if (seg.Equals(ERROR_VALUE_VEC_LATLONG))
+                return false;
+            else
+                return true;
+        }
+
 
         private double Distance(Vec2 A, Vec2 B)
         {
@@ -346,9 +415,11 @@ namespace test.droid
 
         private BitmapDescriptor GetTextMarker(String pseudo, int distance, Android.Graphics.Color couleur, float angle)
         {
-            Paint paint = new Paint();
 
-            //parametre
+            Paint paint = new Paint();
+            String taillePseudoMax = "pseudo";
+
+            //parametres
             paint.TextSize = 64;
             int offset = 30;
             paint.TextAlign = Paint.Align.Left;
@@ -360,20 +431,17 @@ namespace test.droid
             //definiton de la taille du canvas qui va contenir les informations
 
             //taille total du canvas  texte + img + fleche + offset
-            int widthTotal = (int)paint.MeasureText(pseudo) + img.Width + offset * 4 + ((int)paint.TextSize / 2 + offset);
+            int widthTotal = (int)paint.MeasureText(taillePseudoMax) + img.Width + offset * 4 + ((int)paint.TextSize / 2 + offset);
             int heightTotal = img.Width + offset * 4;
             //taille texte + image
-            int width = (int)paint.MeasureText(pseudo) + img.Width + offset * 2;
+            int width = (int)paint.MeasureText(taillePseudoMax) + img.Width + offset * 2;
             int height = img.Width + offset * 2;
 
 
-            // Creation de l'image que l'on vas cosntuiore pas a pas
+            // Creation de l'image que l'on vas constuire pas a pas
             Bitmap image = Bitmap.CreateBitmap(widthTotal, heightTotal, Bitmap.Config.Argb8888);
             Canvas canvas = new Canvas(image);
-
-
-            //zone de dessin : que l'on colorie pour voir les delimitations
-            //  canvas.DrawColor(Android.Graphics.Color.White);
+            //canvas.DrawColor(Android.Graphics.Color.White);
 
             //hop hop hop !!! on dessine 
             paint.Color = new Android.Graphics.Color(220, 220, 220, 100);
@@ -469,8 +537,70 @@ namespace test.droid
             return triangle;
         }
 
+        private double DegreeToRadian(double angleDegre)
+        {
+            return Math.PI * angleDegre / 180.0;
+        }
 
-     
+        private double RadToDegree(double angleRad)
+        {
+            return 180 * angleRad / Math.PI;
+        }
+
+        private Vec2 MovePoint(double latitude, double longitude, double distanceInMetres, double bearing)
+        {
+            double brngRad = DegreeToRadian(bearing);
+            double latRad  = DegreeToRadian(latitude);
+            double lonRad  = DegreeToRadian(longitude);
+            double earthRadiusInMetres = 6371000.0;
+            double distFrac = distanceInMetres / earthRadiusInMetres;
+
+            double latitudeResult = Math.Asin(Math.Sin(latRad) * Math.Cos(distFrac) + Math.Cos(latRad) * Math.Sin(distFrac) * Math.Cos(brngRad));
+            double a = Math.Atan2(Math.Sin(brngRad) * Math.Sin(distFrac) * Math.Cos(latRad), Math.Cos(distFrac) - Math.Sin(latRad) * Math.Sin(latitudeResult));
+            double longitudeResult = (lonRad + a + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
+
+            return new Vec2(RadToDegree(latitudeResult), RadToDegree(longitudeResult));
+        }
+
+        private double CalculateBearing(Vec2 A, Vec2 B)
+        {
+            double λ1 = A.Y;
+            double φ1 = A.X;
+
+            double λ2 = B.Y;
+            double φ2 = B.X;
+
+            double y = Math.Sin(λ2 - λ1) * Math.Cos(φ2);
+            double x = Math.Cos(φ1) * Math.Sin(φ2) -
+                    Math.Sin(φ1) * Math.Cos(φ2) * Math.Cos(λ2 - λ1);
+
+            double brng = Math.Atan2(y, x);
+
+            return RadToDegree(brng);
+        }
+
+        private double CalculateBearing(Position A, Position B)
+        {
+            double λ1 = A.Longitude;
+            double φ1 = A.Latitude;
+
+            double λ2 = B.Longitude;
+            double φ2 = B.Latitude;
+
+            double y = Math.Sin(λ2 - λ1) * Math.Cos(φ2);
+            double x = Math.Cos(φ1) * Math.Sin(φ2) -
+                    Math.Sin(φ1) * Math.Cos(φ2) * Math.Cos(λ2 - λ1);
+
+            double brng = Math.Atan2(y, x);
+            brng = RadToDegree(brng);
+
+            if (brng < 0)
+                return 360 + brng;
+            else
+                return brng;
+
+        }
+
 
         static void Refresh(Object state)
         {
