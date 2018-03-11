@@ -8,7 +8,7 @@
     <StackLayout BackgroundColor="Black">
 
         
-        <Label x:Name="MyLabel" Text="Ca marche !!" HorizontalTextAlignment="Center"/>
+        <!--<Label x:Name="MyLabel" Text="Ca marche !!" HorizontalTextAlignment="Center"/>-->
 
        <!-- <local:CustomMap x:Name="MyMap" MapType="Street"/>
 
@@ -29,6 +29,10 @@
         <Label x:Name="LabelIpClient" Text="Addresse  IP du Server a Rejoindre" TextColor="WhiteSmoke" />
         <Entry x:Name="IpTextClient" Text="entrer ip" TextColor="WhiteSmoke"/>
         <Button x:Name="ClientButton" Text="Rejoindre"/>
+
+
+        <Label x:Name="labelMessageServer" TextColor="Gold" Text="server"/>
+        <Label x:Name="LabelMessageClient" TextColor="HotPink" Text="client"/>
 
     </StackLayout>
     

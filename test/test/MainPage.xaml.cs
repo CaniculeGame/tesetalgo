@@ -10,16 +10,26 @@ using Xamarin.Forms.Maps;
 using System.Collections.Generic;
 using System.Threading;
 using System.Net;
+using System.Net.NetworkInformation;
+using System.Diagnostics;
 
 namespace test
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
-        Position MyPosition;
-        readonly Position FirstPosition = new Position(43.1166700, 5.9333300); //lat , long
-        readonly double FirstSliderZoom = 50; //en metre
-        MapInfoSingleton mapInfo = MapInfoSingleton.Instance();
+        /*  Position MyPosition;
+          readonly Position FirstPosition = new Position(43.1166700, 5.9333300); //lat , long
+          readonly double FirstSliderZoom = 50; //en metre
+          MapInfoSingleton mapInfo = MapInfoSingleton.Instance();*/
+
+
+        test.Server server = null;
+        test.Client client = null;
+        test.GlobalSingleton labelGlobalInstance = null;
+        Thread refreshThread = null;
+
+        IPAddress[] address;
 
         public MainPage()
         {
@@ -143,20 +153,97 @@ namespace test
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Partie client server test
 
-            IPAddress[] address = Dns.GetHostAddresses(Dns.GetHostName());
+            address = Dns.GetHostAddresses(Dns.GetHostName());
             IpTextServer.Text = address[0].ToString();
+            Console.WriteLine(address[0].ToString());
+
+           var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+           foreach ( var elem in networkInterfaces)
+                 Console.WriteLine(elem.ToString());
 
 
+            labelGlobalInstance = GlobalSingleton.Instance();
+            refreshThread = new Thread(Refresh);
+            refreshThread.Start();
+            ServerButton.Clicked += OnButtonServerClicked;
+            ClientButton.Clicked += OnButtonClientClicked;
 
         }
 
+        private void Refresh()
+        {
+
+            Stopwatch watch = new Stopwatch();
+            int interval = 33;//ms
+            watch.Start();
+            bool continuer = true;
+            while (continuer)
+            {
+                if (watch.ElapsedMilliseconds > interval)
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        LabelMessageClient.Text = GlobalSingleton.Instance().LabelClient;
+                        labelMessageServer.Text = GlobalSingleton.Instance().LabelServer;
+                    });
+
+                    watch.Restart();
+                }
+                else
+                {
+                    Thread.Sleep(33);
+                }
+            }
+        }
+
+        private void OnButtonServerClicked(object sender, EventArgs e)
+        {
+            if (server == null)
+            {
+                server = new test.Server(new IPEndPoint(address[0], 8080), 5);
+            }
+
+            if (!server.IsStarted())
+            {
+                server.Start();
+                ServerButton.Text = "Stopper Serveur";
+            }
+            else
+            {
+                server.Stop();
+                ServerButton.Text = "Demarrer Serveur";
+            }
+        }
+
+
+        private void OnButtonClientClicked(object sender, EventArgs e)
+        {
+            if (client == null)
+                client = new Client(new IPEndPoint(IPAddress.Parse(IpTextClient.Text), 8080));
+
+            if (client != null && !client.IsStarted)
+            {
+                ClientButton.Text = "Deconnexion" ;
+                client.Start();
+            }
+            else if (client != null && client.IsStarted)
+            {
+                ClientButton.Text = "Rejoindre";
+                client.Stop();
+            }
+        }
+
+
+
+
         private void OnButtonCliked(object sender, EventArgs e)
         {
-            mapInfo.Map.MoveToRegion(MapSpan.FromCenterAndRadius(FirstPosition, Distance.FromMeters(FirstSliderZoom)));
-           /* MyLabelSlider.Text = FirstSliderZoom.ToString();
-            MySliderZoom.Value = FirstSliderZoom;
-            MySliderLat.Value = FirstPosition.Latitude;
-            MySliderLong.Value = FirstPosition.Longitude;*/
+            /* mapInfo.Map.MoveToRegion(MapSpan.FromCenterAndRadius(FirstPosition, Distance.FromMeters(FirstSliderZoom)));
+             MyLabelSlider.Text = FirstSliderZoom.ToString();
+             MySliderZoom.Value = FirstSliderZoom;
+             MySliderLat.Value = FirstPosition.Latitude;
+             MySliderLong.Value = FirstPosition.Longitude;*/
+
         }
 
         private void OnSliderZoomValueChange(object sender, ValueChangedEventArgs e)
