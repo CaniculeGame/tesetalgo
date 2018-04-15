@@ -72,7 +72,7 @@ namespace test
         {
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            int tpsInterval = 60000; //ms
+            int tpsInterval = 2000; //ms
             while (isStarted)
             {
                 if (watch.ElapsedMilliseconds > tpsInterval)

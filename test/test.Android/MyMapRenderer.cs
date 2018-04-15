@@ -20,16 +20,49 @@ namespace test.droid
         private GoogleMap map = null;
         private Bitmap bmp = null;
         private Bitmap resizedBitmap = null;
+        private Bitmap flagBitmap = null;
+        private Bitmap resizedFlagBitmap = null;
         private readonly static double ERROR_VALUE_LATLONG = 200;
         private readonly Vec2 ERROR_VALUE_VEC_LATLONG = new Vec2(ERROR_VALUE_LATLONG, ERROR_VALUE_LATLONG);
+
+
 
         public MyMapRenderer(Context context) : base(context)
         {
             bmp = BitmapFactory.DecodeResource(Resources, test.Droid.Resource.Drawable.location_icon);
             resizedBitmap = Bitmap.CreateScaledBitmap(bmp, 128, 128, false);
+
+            GlobalSingleton.Instance().Client.NeedRefreshMap += new EventHandler(RefreshPosition);
+
+            flagBitmap = BitmapFactory.DecodeResource(Resources, test.Droid.Resource.Drawable.flag);
+            resizedFlagBitmap = Bitmap.CreateScaledBitmap(flagBitmap, 64, 64, false);
+
         }
 
+        public  void MakePointToReachMarker(object sender, GoogleMap.MapLongClickEventArgs e)
+        {
+            MapInfoSingleton mapInfo = MapInfoSingleton.Instance();
 
+            LatLng pos = (LatLng)e.Point;
+
+            CustomPin newPin = new CustomPin()
+            {
+                Type = PinType.Generic,
+                Position = new Position(pos.Latitude, pos.Longitude),
+                Label = "10",
+                Address = "394 Pacific Ave, San Francisco CA",
+                Id = "0",
+                Dist = 0,
+                TypePin = Genre.VISIBLE_REACHPOINT,
+                PositionAffichage = new Position(pos.Latitude, pos.Longitude)
+            };
+
+            if (mapInfo.Map != null && newPin != null)
+            {
+                mapInfo.Map.CustomPins.Add(newPin);
+                mapInfo.Map.Pins.Add(newPin);
+            }
+        }
 
         public global::Android.Views.View GetInfoContents(Marker marker)
         {
@@ -88,6 +121,9 @@ namespace test.droid
             base.OnMapReady(map);
             NativeMap.SetInfoWindowAdapter(this);
             this.map = map;
+
+            if (this.map != null)
+                this.map.MapLongClick += MakePointToReachMarker;
         }
 
         protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -112,7 +148,7 @@ namespace test.droid
                 map.AddPolygon(polygonOption);*/
                 
 
-                Vec2 E1 = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Southwest.Latitude , map.Projection.VisibleRegion.LatLngBounds.Northeast.Longitude );
+            /*    Vec2 E1 = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Southwest.Latitude , map.Projection.VisibleRegion.LatLngBounds.Northeast.Longitude );
                 Vec2 F1 = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Northeast.Latitude  , map.Projection.VisibleRegion.LatLngBounds.Northeast.Longitude);
                 Vec2 G1 = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Northeast.Latitude , map.Projection.VisibleRegion.LatLngBounds.Southwest.Longitude );
                 Vec2 H1 = new Vec2(map.Projection.VisibleRegion.LatLngBounds.Southwest.Latitude , map.Projection.VisibleRegion.LatLngBounds.Southwest.Longitude );
@@ -127,7 +163,7 @@ namespace test.droid
 
                 polygonOption1.InvokeStrokeColor(Android.Graphics.Color.Violet);
 
-                map.AddPolygon(polygonOption1);
+                map.AddPolygon(polygonOption1);*/
                 
 
                 /* PolylineOptions polyline1 = new PolylineOptions();
@@ -164,7 +200,7 @@ namespace test.droid
                     Position posNear = new Position(map.Projection.VisibleRegion.NearRight.Latitude, map.Projection.VisibleRegion.NearRight.Longitude);
                     Position posFar = new Position(map.Projection.VisibleRegion.FarRight.Latitude, map.Projection.VisibleRegion.FarRight.Longitude);
 
-                    float rayon =(float) DistanceKm(posNear, posFar); //en km
+                    float rayon = (float)DistanceKm(posNear, posFar); //en km
                     Console.WriteLine("r = " + rayon);
                     BitmapDescriptor bm = GetTextMarker(MyPin.Label, MyPin.Dist, Android.Graphics.Color.Red, 45f);
                     //MyPin.PositionAffichage = CalculPosition(MapInfoSingleton.Instance().GetPosition(), pin.Position, rayon);
@@ -172,15 +208,15 @@ namespace test.droid
 
 
                     Position centerCameraMap = new Position(map.Projection.VisibleRegion.LatLngBounds.Center.Latitude, map.Projection.VisibleRegion.LatLngBounds.Center.Longitude);
-                        //MyPin.PositionAffichage = CalculPosition(pin.Position, centerCameraMap, map.Projection.VisibleRegion.LatLngBounds);
-                    MyPin.PositionAffichage = CalculNouvellePosition(centerCameraMap, pin.Position, map.Projection.VisibleRegion.LatLngBounds,pin.Label);
+                    //MyPin.PositionAffichage = CalculPosition(pin.Position, centerCameraMap, map.Projection.VisibleRegion.LatLngBounds);
+                    MyPin.PositionAffichage = CalculNouvellePosition(centerCameraMap, pin.Position, map.Projection.VisibleRegion.LatLngBounds, pin.Label);
 
                     Console.WriteLine(map.Projection.VisibleRegion.LatLngBounds.ToString());
 
 
-                    Console.WriteLine("("+MyPin.Position.Latitude+" , " +pin.Position.Longitude+")   "+MyPin.PositionAffichage.Latitude +"  "+ MyPin.PositionAffichage.Longitude);
+                    Console.WriteLine("(" + MyPin.Position.Latitude + " , " + pin.Position.Longitude + ")   " + MyPin.PositionAffichage.Latitude + "  " + MyPin.PositionAffichage.Longitude);
                     CustomMarker.SetPosition(new LatLng(MyPin.PositionAffichage.Latitude, MyPin.PositionAffichage.Longitude));
-                  //  CustomMarker.SetPosition(new LatLng(pin.Position.Latitude,pin.Position.Longitude));
+                    //  CustomMarker.SetPosition(new LatLng(pin.Position.Latitude,pin.Position.Longitude));
                     CustomMarker.SetIcon(bm);
                 }
                 else if (MyPin.TypePin == Genre.VISIBLE) // marker fleche
@@ -192,6 +228,16 @@ namespace test.droid
                 {
                     CustomMarker.SetPosition(new LatLng(pin.Position.Latitude, pin.Position.Longitude));
                     CustomMarker.SetIcon(BitmapDescriptorFactory.FromBitmap(resizedBitmap));
+                }
+                else if (MyPin.TypePin == Genre.VISIBLE_REACHPOINT)
+                {
+                    CustomMarker.SetPosition(new LatLng(pin.Position.Latitude, pin.Position.Longitude));
+                    CustomMarker.SetIcon(BitmapDescriptorFactory.FromBitmap(resizedFlagBitmap));
+                }
+                else if (MyPin.TypePin == Genre.PAS_VISIBLE_REACHPOINT)
+                {
+                    CustomMarker.SetPosition(new LatLng(pin.Position.Latitude, pin.Position.Longitude));
+                    CustomMarker.SetIcon(BitmapDescriptorFactory.FromBitmap(resizedFlagBitmap));
                 }
 
                 return CustomMarker;
@@ -602,6 +648,20 @@ namespace test.droid
         }
 
 
+
+        public void RefreshPosition(object sender, EventArgs e)
+        {
+            MapInfoSingleton.Instance().SetPosition(GlobalSingleton.Instance().MaPosition);
+            MapInfoSingleton mapInfo = MapInfoSingleton.Instance();
+
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+            {
+                Refresh(map);
+            });
+           
+        }
+
+
         static void Refresh(Object state)
         {
             MapInfoSingleton mapInfo = MapInfoSingleton.Instance();
@@ -612,9 +672,14 @@ namespace test.droid
 
             LatLngBounds bounds = carte.Projection.VisibleRegion.LatLngBounds;
 
-           // Console.Write("bounds = "+bounds.ToString() );
 
             if (mapInfo == null)
+                return;
+
+            if (mapInfo.Map == null)
+                return;
+
+            if (mapInfo.Map.VisibleRegion == null)
                 return;
 
             mapInfo.MapSpan = mapInfo.Map.VisibleRegion;
@@ -630,7 +695,7 @@ namespace test.droid
 
             foreach (var pin in cPin)
             {
-                if (pin.TypePin != Genre.OWN)
+                if (pin.TypePin != Genre.OWN && pin.TypePin != Genre.PAS_VISIBLE_REACHPOINT && pin.TypePin != Genre.VISIBLE_REACHPOINT)
                 {
 
                     double dst = DistanceKm(mapInfo.GetPosition(), pin.Position);
@@ -646,7 +711,12 @@ namespace test.droid
                         Console.WriteLine("VISIBLE  = " + dst);
                     }
                 }
-                else { Console.WriteLine("OWN"); }
+                 else if(pin.TypePin == Genre.OWN)
+                {
+                    Console.WriteLine("OWN");
+                    pin.Position = mapInfo.GetPosition();
+                }
+                
 
 
                 if (mapInfo != null && pin != null)

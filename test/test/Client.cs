@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Plugin.Geolocator;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Xamarin.Forms.Maps;
 
 namespace test
 {
@@ -17,6 +19,9 @@ namespace test
         private Socket socketClient = null;
         private IPEndPoint ipEndpoint = null;
 
+        public event EventHandler NeedRefreshMap;//creation d'un event
+        public event EventHandler NeedToReCenterPos;
+
         public Client(IPEndPoint addrIp)
         {
             socketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -26,6 +31,15 @@ namespace test
 
         private void TraitementClient()
         {
+            var locator = CrossGeolocator.Current;
+            locator.DesiredAccuracy = 50;
+            var pos = locator.GetPositionAsync().Result;
+            GlobalSingleton.Instance().MaPosition = new Position(pos.Latitude, pos.Longitude);
+            MapInfoSingleton.Instance().SetPosition(GlobalSingleton.Instance().MaPosition);
+            if(NeedToReCenterPos!=null)
+                NeedToReCenterPos(this, new EventArgs());
+
+
             int i = 0;
             Stopwatch watch = new Stopwatch();
             byte[] data = new byte[256];
@@ -35,7 +49,7 @@ namespace test
                 socketClient.Connect(ipEndpoint);
             }catch(Exception e)
             {
-                Console.WriteLine("serveur invalide");
+                Console.WriteLine("serveur invalide " + e);
                 return;
             }
             
@@ -43,11 +57,14 @@ namespace test
             if (!socketClient.Connected)
             {
                 IsStarted = false;
-                Console.WriteLine("echec connection");
+                Console.WriteLine("echec connection ");
+                GlobalSingleton.Instance().ButtonClientLabel = "Echec Connexion";
             }
             else
             {
                 Console.WriteLine("connection etablie");
+                GlobalSingleton.Instance().ButtonClientLabel = "Deconnexion";
+                
             }
 
             watch.Start();
@@ -57,8 +74,16 @@ namespace test
                 {
                     if (socketClient.Connected)
                     {
-                        //envoi de donnée
-                        data = Encoding.UTF8.GetBytes("coucou!! iteration client numero = "+i);
+
+                        //recuperation des donnée
+                        locator = CrossGeolocator.Current;
+                        locator.DesiredAccuracy = 50;
+                        pos = locator.GetPositionAsync().Result;
+                        GlobalSingleton.Instance().MaPosition  = new Position(pos.Latitude,pos.Longitude);
+                        MapInfoSingleton.Instance().SetPosition(GlobalSingleton.Instance().MaPosition);
+
+                        //envoi de ma position msg id = 0 : id:couleur:pseudo:lat:long 
+                        data = Encoding.UTF8.GetBytes(GlobalSingleton.Instance().MaPosition.Latitude+":"+GlobalSingleton.Instance().MaPosition.Longitude);
                         i++;
                         socketClient.Send(data);
 
@@ -69,6 +94,10 @@ namespace test
 
                         //restart compteur
                         watch.Restart();
+
+                        //lance event pour rechargement position carte
+                        if (NeedRefreshMap != null)
+                            NeedRefreshMap(this, new EventArgs());
                     }
                     else
                     {
@@ -82,10 +111,10 @@ namespace test
 
             }
 
-            if (socketClient != null)
-                socketClient.Close();
-
-            Stop();
+           socketClient.Disconnect(false);
+            socketClient.Dispose();
+           socketClient.Close();
+           Stop();
         }
 
 
@@ -95,6 +124,7 @@ namespace test
             if(isStarted)
             {
                 isStarted = false;
+                GlobalSingleton.Instance().ButtonClientLabel = "Rejoindre";
             }
         }
 
@@ -110,6 +140,7 @@ namespace test
 
 
         public bool IsStarted { get { return isStarted; } set { isStarted = value; } }
+        public bool IsConnected { get { return socketClient.Connected; } }
 
     }
 }

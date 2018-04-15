@@ -18,16 +18,8 @@ namespace test
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
-        /*  Position MyPosition;
-          readonly Position FirstPosition = new Position(43.1166700, 5.9333300); //lat , long
-          readonly double FirstSliderZoom = 50; //en metre
-          MapInfoSingleton mapInfo = MapInfoSingleton.Instance();*/
 
-
-        test.Server server = null;
-        test.Client client = null;
         test.GlobalSingleton labelGlobalInstance = null;
-        Thread refreshThread = null;
 
         IPAddress[] address;
 
@@ -157,16 +149,19 @@ namespace test
             IpTextServer.Text = address[0].ToString();
             Console.WriteLine(address[0].ToString());
 
-           var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
-           foreach ( var elem in networkInterfaces)
-                 Console.WriteLine(elem.ToString());
+            var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (var elem in networkInterfaces)
+                Console.WriteLine(elem.ToString());
 
 
             labelGlobalInstance = GlobalSingleton.Instance();
-            refreshThread = new Thread(Refresh);
-            refreshThread.Start();
+            GlobalSingleton.Instance().RefreshThread = new Thread(Refresh);
+            GlobalSingleton.Instance().RefreshThread.Start();
             ServerButton.Clicked += OnButtonServerClicked;
             ClientButton.Clicked += OnButtonClientClicked;
+
+            GlobalSingleton.Instance().ButtonClientLabel = ClientButton.Text;
+            GlobalSingleton.Instance().ButtonServerLabel = ServerButton.Text;
 
         }
 
@@ -177,6 +172,7 @@ namespace test
             int interval = 33;//ms
             watch.Start();
             bool continuer = true;
+            GlobalSingleton.Instance().Page2 = false;
             while (continuer)
             {
                 if (watch.ElapsedMilliseconds > interval)
@@ -185,6 +181,18 @@ namespace test
                     {
                         LabelMessageClient.Text = GlobalSingleton.Instance().LabelClient;
                         labelMessageServer.Text = GlobalSingleton.Instance().LabelServer;
+                        ClientButton.Text = GlobalSingleton.Instance().ButtonClientLabel;
+                        ServerButton.Text = GlobalSingleton.Instance().ButtonServerLabel;
+
+
+                        //si on est co on chage de page
+                        if (GlobalSingleton.Instance().Client != null && GlobalSingleton.Instance().Client.IsConnected && !GlobalSingleton.Instance().Page2)
+                        {
+                            //changer de page
+                            Navigation.PushAsync(new MapPage());
+                            GlobalSingleton.Instance().Page2 = true;
+                            
+                        }
                     });
 
                     watch.Restart();
@@ -198,42 +206,75 @@ namespace test
 
         private void OnButtonServerClicked(object sender, EventArgs e)
         {
-            if (server == null)
+            GlobalSingleton.Instance().Perso.Pseudo = pseudo.Text;
+
+            if (GlobalSingleton.Instance().Server == null)
             {
-                server = new test.Server(new IPEndPoint(address[0], 8080), 5);
+                GlobalSingleton.Instance().Server = new test.Server(new IPEndPoint(address[0], 8080), 5);
+               
             }
 
-            if (!server.IsStarted())
+            if (!GlobalSingleton.Instance().Server.IsStarted())
             {
-                server.Start();
-                ServerButton.Text = "Stopper Serveur";
+                GlobalSingleton.Instance().Server.Start();
+                GlobalSingleton.Instance().ButtonServerLabel = "Stopper Serveur";
             }
             else
             {
-                server.Stop();
-                ServerButton.Text = "Demarrer Serveur";
+                GlobalSingleton.Instance().Server.Stop();
+                GlobalSingleton.Instance().ButtonServerLabel = "Demarrer Serveur";
             }
         }
 
 
         private void OnButtonClientClicked(object sender, EventArgs e)
-        {
-            if (client == null)
-                client = new Client(new IPEndPoint(IPAddress.Parse(IpTextClient.Text), 8080));
+        { 
+           GlobalSingleton.Instance().Perso.Pseudo = pseudo.Text;
 
-            if (client != null && !client.IsStarted)
+            if (GlobalSingleton.Instance().Client == null)
+                GlobalSingleton.Instance().Client = new Client(new IPEndPoint(IPAddress.Parse(IpTextClient.Text), 8080));
+
+            if (GlobalSingleton.Instance().Client != null && !GlobalSingleton.Instance().Client.IsStarted)
             {
-                ClientButton.Text = "Deconnexion" ;
-                client.Start();
+                GlobalSingleton.Instance().ButtonClientLabel = "Connection en cours";
+                GlobalSingleton.Instance().Client.Start();
             }
-            else if (client != null && client.IsStarted)
+            else if (GlobalSingleton.Instance().Client != null && GlobalSingleton.Instance().Client.IsStarted)
             {
-                ClientButton.Text = "Rejoindre";
-                client.Stop();
+                GlobalSingleton.Instance().ButtonClientLabel = "Rejoindre";
+                GlobalSingleton.Instance().Client.Stop();
             }
         }
 
 
+        private void OnbuttonColorCLicked(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            if (button != null)
+            {
+                if (GlobalSingleton.Instance().Perso != null)
+                {
+                    GlobalSingleton.Instance().Perso.Couleur = button.TextColor;
+                }
+
+                button0.BorderColor = Color.Red;
+                button1.BorderColor = Color.Pink;
+                button2.BorderColor = Color.Violet;
+                button3.BorderColor = Color.Blue;
+                button4.BorderColor = Color.Green;
+                button5.BorderColor = Color.Yellow;
+                button6.BorderColor = Color.Orange;
+                button7.BorderColor = Color.OrangeRed;
+
+                button.BorderColor = Color.AntiqueWhite;
+                button.BorderWidth = 2;
+
+                Box0.Color = button.BackgroundColor;
+                Box1.Color = button.BackgroundColor;
+
+            }
+
+        }
 
 
         private void OnButtonCliked(object sender, EventArgs e)
@@ -248,45 +289,45 @@ namespace test
 
         private void OnSliderZoomValueChange(object sender, ValueChangedEventArgs e)
         {
-           /* mapInfo.Map.MoveToRegion(MapSpan.FromCenterAndRadius(MyPosition, Distance.FromMeters(MySliderZoom.Value)));
-            MyLabelSlider.Text = MySliderZoom.Value.ToString();*/
+            /* mapInfo.Map.MoveToRegion(MapSpan.FromCenterAndRadius(MyPosition, Distance.FromMeters(MySliderZoom.Value)));
+             MyLabelSlider.Text = MySliderZoom.Value.ToString();*/
         }
 
         private void OnSliderLatValueChange(object sender, ValueChangedEventArgs e)
         {
-           /* Position pos = new Position(MyPosition.Latitude + MySliderLat.Value, MyPosition.Longitude);
-            mapInfo.Map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMeters(MySliderZoom.Value)));*/
-           // mapInfo.Map.Clear();
+            /* Position pos = new Position(MyPosition.Latitude + MySliderLat.Value, MyPosition.Longitude);
+             mapInfo.Map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMeters(MySliderZoom.Value)));*/
+            // mapInfo.Map.Clear();
         }
 
         private void OnSliderLongValueChange(object sender, ValueChangedEventArgs e)
         {
-           /* Position pos = new Position(MyPosition.Latitude, MyPosition.Longitude + +MySliderLong.Value);
-            mapInfo.Map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMeters(MySliderZoom.Value)));*/
+            /* Position pos = new Position(MyPosition.Latitude, MyPosition.Longitude + +MySliderLong.Value);
+             mapInfo.Map.MoveToRegion(MapSpan.FromCenterAndRadius(pos, Distance.FromMeters(MySliderZoom.Value)));*/
         }
 
         private void OnButtonAddClicked(object sender, EventArgs e)
         {
-          /*  CustomPin MyPin = new CustomPin()
-            {
-                Type = PinType.Generic,
-                Position = new Position(MyPosition.Latitude + MySliderLat.Value, MyPosition.Longitude + MySliderLong.Value),
-                Label = "Pseudo",
-                Address = "394 Pacific Ave, San Francisco CA",
-                Id = "0",
-                Dist = 0,
-                TypePin = Genre.VISIBLE,
-                PositionAffichage = new Position(MyPosition.Latitude + MySliderLat.Value, MyPosition.Longitude + MySliderLong.Value)
-            };
+            /*  CustomPin MyPin = new CustomPin()
+              {
+                  Type = PinType.Generic,
+                  Position = new Position(MyPosition.Latitude + MySliderLat.Value, MyPosition.Longitude + MySliderLong.Value),
+                  Label = "Pseudo",
+                  Address = "394 Pacific Ave, San Francisco CA",
+                  Id = "0",
+                  Dist = 0,
+                  TypePin = Genre.VISIBLE,
+                  PositionAffichage = new Position(MyPosition.Latitude + MySliderLat.Value, MyPosition.Longitude + MySliderLong.Value)
+              };
 
-            if (mapInfo.Map != null && MyPin != null)
-            {
-                mapInfo.Map.CustomPins.Add(MyPin);
-                mapInfo.Map.Pins.Add(MyPin);
-            }*/
+              if (mapInfo.Map != null && MyPin != null)
+              {
+                  mapInfo.Map.CustomPins.Add(MyPin);
+                  mapInfo.Map.Pins.Add(MyPin);
+              }*/
 
 
         }
-
     }
+
 }

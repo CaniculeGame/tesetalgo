@@ -7,32 +7,62 @@
 
     <StackLayout BackgroundColor="Black">
 
-        
-        <!--<Label x:Name="MyLabel" Text="Ca marche !!" HorizontalTextAlignment="Center"/>-->
-
-       <!-- <local:CustomMap x:Name="MyMap" MapType="Street"/>
-
-        <Slider x:Name="MySliderZoom" Maximum="1000" Minimum="10"  Value="300" />
-        <Label x:Name="MyLabelSlider" Text="0" TextColor="Red" HorizontalTextAlignment="Center"/>
-        
-        <Slider x:Name="MySliderLat"  Maximum="0.1" Minimum="-0.10"  Value="0" />
-        <Slider x:Name="MySliderLong" Maximum="0.1" Minimum="-0.10"  Value="0" />
-
-        <Button x:Name="MyReinitButton" Text="Reinit"/>
-        <Button x:Name="MyPinButton" Text="Add Pin"/> -->
-
         <Label x:Name="LabelIpServer" Text="Mon address IP " TextColor="WhiteSmoke" />
-        <Entry x:Name="IpTextServer" Text="enter ip" TextColor="WhiteSmoke"/>
+        <Entry x:Name="IpTextServer" Text="enter ip" TextColor="WhiteSmoke" />
         <Button x:Name="ServerButton" Text="Demarrer Server"/>
 
-
+        <BoxView   
+           x:Name="Box1"
+           VerticalOptions="Center"
+           HorizontalOptions="Center"
+           HeightRequest="10"
+           WidthRequest="2000"  
+           Color="#5b5d68"></BoxView>
+        
         <Label x:Name="LabelIpClient" Text="Addresse  IP du Server a Rejoindre" TextColor="WhiteSmoke" />
-        <Entry x:Name="IpTextClient" Text="entrer ip" TextColor="WhiteSmoke"/>
+        <Entry x:Name="IpTextClient" Placeholder="entrer ip" TextColor="WhiteSmoke"  PlaceholderColor="Silver"/>
         <Button x:Name="ClientButton" Text="Rejoindre"/>
 
 
         <Label x:Name="labelMessageServer" TextColor="Gold" Text="server"/>
         <Label x:Name="LabelMessageClient" TextColor="HotPink" Text="client"/>
+
+        <BoxView   
+            x:Name="Box0"
+            VerticalOptions="Center"
+           HorizontalOptions="Center"
+           HeightRequest="10"
+           WidthRequest="2000"  
+           Color="#5b5d68"></BoxView>
+        
+        <Label x:Name="profilInfo"  TextColor="WhiteSmoke"  Text="Ton  profil"/>
+        <Entry x:Name="pseudo" TextColor="AntiqueWhite" Placeholder="Entrer pseudo" PlaceholderColor="Silver"/>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="button0" Grid.Row="0" Grid.Column="0" BackgroundColor="Red" BorderColor="Red" Clicked="OnbuttonColorCLicked"  TextColor="Red"/>
+            <Button x:Name="button1" Text="" Grid.Row="0" Grid.Column="1" BackgroundColor="Pink" BorderColor="Pink" Clicked="OnbuttonColorCLicked" TextColor="Pink"/>
+            <Button x:Name="button2" Text="" Grid.Row="0" Grid.Column="2" BackgroundColor="Violet" BorderColor="Violet" Clicked="OnbuttonColorCLicked" TextColor="Violet"/>
+            <Button x:Name="button3" Text="" Grid.Row="0" Grid.Column="3" BackgroundColor="Blue" BorderColor="Blue" Clicked="OnbuttonColorCLicked" TextColor="Blue"/>
+            <Button x:Name="button4" Text="" Grid.Row="0" Grid.Column="4" BackgroundColor="Green" BorderColor="Green" Clicked="OnbuttonColorCLicked" TextColor="Green"/>
+            <Button x:Name="button5" Text="" Grid.Row="0" Grid.Column="5" BackgroundColor="Yellow" BorderColor="Yellow" Clicked="OnbuttonColorCLicked" TextColor="Yellow"/>
+            <Button x:Name="button6" Text="" Grid.Row="0" Grid.Column="6" BackgroundColor="Orange" BorderColor="Orange" Clicked="OnbuttonColorCLicked" TextColor="Orange"/>
+            <Button x:Name="button7" Text="" Grid.Row="0" Grid.Column="7" BackgroundColor="OrangeRed" BorderColor="OrangeRed" Clicked="OnbuttonColorCLicked" TextColor="OrangeRed"/>
+        </Grid>
+        
+
 
     </StackLayout>
     

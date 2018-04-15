@@ -13,7 +13,7 @@ namespace test
 		{
 			InitializeComponent();
 
-			MainPage = new test.MainPage();
+            MainPage = new NavigationPage(new test.MainPage());
 		}
 
 		protected override void OnStart ()

@@ -10,7 +10,7 @@ namespace test
     {
         private static MapInfoSingleton instance = null;
 
-        private Position pos;
+        private Position pos; // ma position sur la map
         private Position camera;
         private Rectangle ViewPort;
         private MapSpan mapSpan;
@@ -30,7 +30,11 @@ namespace test
             set { map = value; }
         }
 
-        public void SetPosition(Position p) { pos = p; }
+        public void SetPosition(Position p)
+        {
+            pos = p;
+        }
+
         public Position GetPosition() { return pos; }
 
         public Rectangle Rect

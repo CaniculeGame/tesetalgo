@@ -8,6 +8,8 @@ namespace test
     {
         OWN = 0,
         VISIBLE = 1,
-        PAS_VISIBLE =2
+        PAS_VISIBLE =2,
+        VISIBLE_REACHPOINT = 3,
+        PAS_VISIBLE_REACHPOINT = 4
     }
 }
