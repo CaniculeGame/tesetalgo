@@ -670,6 +670,16 @@ namespace test.droid
             if (carte == null)
                 return;
 
+            try
+            {
+                if (carte.Projection == null && carte.Projection.VisibleRegion == null && carte.Projection.VisibleRegion.LatLngBounds == null)
+                    return;
+            }catch(Exception e)
+            {
+                Console.WriteLine("ERREUR   mapRenderer : " + e);
+                return;
+            }
+
             LatLngBounds bounds = carte.Projection.VisibleRegion.LatLngBounds;
 
 

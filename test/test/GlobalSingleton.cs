@@ -21,8 +21,13 @@ namespace test
         private Thread refreshThread = null;
         private bool page2 = false;
         private Personnage perso = null;
+        private List<Personnage> participants = null;
 
-        private GlobalSingleton() {}
+        private GlobalSingleton()
+        {
+            perso = new Personnage();
+            participants = new List<Personnage>();
+        }
 
 
         public static GlobalSingleton Instance()
@@ -44,5 +49,6 @@ namespace test
         public Thread RefreshThread { get { return refreshThread; } set { refreshThread = value; } }
         public bool Page2 { get { return page2; } set { page2 = value; } }
         public Personnage Perso { get { return perso; } set { perso = value; } }
+        public List<Personnage> Participants { get { return participants; } set { participants = value; } }
     }
 }

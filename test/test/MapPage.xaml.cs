@@ -59,18 +59,19 @@ namespace test
 
         public  void ReCentrerPosition(object sender, EventArgs e)
         {
-            MyMap.MoveToRegion(MapSpan.FromCenterAndRadius(MapInfoSingleton.Instance().GetPosition(),mapInfo.MapSpan.Radius));
+            if(MyMap != null)
+                MyMap.MoveToRegion(MapSpan.FromCenterAndRadius(MapInfoSingleton.Instance().GetPosition(),mapInfo.MapSpan.Radius));
         }
 
         protected override void OnDisappearing()
         {
             //deconnexion
+            //GlobalSingleton.Instance().Page2 = false;
             if (GlobalSingleton.Instance().Client != null)
                 GlobalSingleton.Instance().Client.Stop();
 
-            GlobalSingleton.Instance().Page2 = false;
-
-            Navigation.PopAsync();
+            //destroy all
+            MyMap = null;
         }
     }
 }

@@ -206,7 +206,10 @@ namespace test
 
         private void OnButtonServerClicked(object sender, EventArgs e)
         {
-            GlobalSingleton.Instance().Perso.Pseudo = pseudo.Text;
+            if (pseudo.Text != null && pseudo.Text != "")
+                GlobalSingleton.Instance().Perso.Pseudo = pseudo.Text;
+            else 
+                GlobalSingleton.Instance().Perso.Pseudo = "NoPseudo";
 
             if (GlobalSingleton.Instance().Server == null)
             {
@@ -228,10 +231,13 @@ namespace test
 
 
         private void OnButtonClientClicked(object sender, EventArgs e)
-        { 
-           GlobalSingleton.Instance().Perso.Pseudo = pseudo.Text;
+        {
+            if (pseudo.Text != null && pseudo.Text != "")
+                GlobalSingleton.Instance().Perso.Pseudo = pseudo.Text;
+            else
+                GlobalSingleton.Instance().Perso.Pseudo = "NoPseudo";
 
-            if (GlobalSingleton.Instance().Client == null)
+            if (GlobalSingleton.Instance().Client == null && IpTextClient.Text != null)
                 GlobalSingleton.Instance().Client = new Client(new IPEndPoint(IPAddress.Parse(IpTextClient.Text), 8080));
 
             if (GlobalSingleton.Instance().Client != null && !GlobalSingleton.Instance().Client.IsStarted)

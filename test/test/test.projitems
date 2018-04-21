@@ -27,6 +27,7 @@
       <DependentUpon>MapPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Message.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Personnage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Server.cs" />
   </ItemGroup>
