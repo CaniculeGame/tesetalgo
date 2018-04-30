@@ -9,6 +9,7 @@ namespace test
     class Personnage
     {
         public static int INVALID_ID_VALUE = -1;
+        public static string DEFAULT_PSEUDO_VALUE = "NoPseudo";
 
         private String pseudo = "NoPseudo";
         private int id = INVALID_ID_VALUE;

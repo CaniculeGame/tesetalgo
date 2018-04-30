@@ -22,15 +22,63 @@ namespace test.droid
         private Bitmap resizedBitmap = null;
         private Bitmap flagBitmap = null;
         private Bitmap resizedFlagBitmap = null;
+        private Bitmap myPositionIcon = null;
         private readonly static double ERROR_VALUE_LATLONG = 200;
         private readonly Vec2 ERROR_VALUE_VEC_LATLONG = new Vec2(ERROR_VALUE_LATLONG, ERROR_VALUE_LATLONG);
 
+        private static Bitmap changeBitmapIconLocationColor(Bitmap sourceBitmap, Xamarin.Forms.Color color)
+        {
+            Bitmap resultBitmap = sourceBitmap.Copy(sourceBitmap.GetConfig(), true);
+
+            int[] allpixels = new int[sourceBitmap.Height * sourceBitmap.Width];
+            int red = 0;
+            int green = 0;
+            int blue = 0;
+            sourceBitmap.GetPixels(allpixels, 0, sourceBitmap.Width, 0, 0, sourceBitmap.Width, sourceBitmap.Height);
+
+            Android.Graphics.Color colorIconDefault = Android.Graphics.Color.ParseColor("#ffff8300");
+            Android.Graphics.Color newColor = Android.Graphics.Color.ParseColor(EncodeDecode.GetHexString(GlobalSingleton.Instance().Perso.Couleur));
+
+            Console.WriteLine("new color = " + newColor.ToString());
+
+            for (int i = 0; i < allpixels.Length; i++)
+            {
+                if (allpixels[i] == colorIconDefault)
+                {
+                    allpixels[i] = newColor;
+                }
+                else 
+                {
+                    int alpha = Android.Graphics.Color.GetAlphaComponent(allpixels[i]);
+                    if (alpha > 0 && alpha < 255)
+                    {
+                         red = Android.Graphics.Color.GetRedComponent(newColor) + (Android.Graphics.Color.GetRedComponent(newColor) *  30 / 100) ;
+                        if (red > 255)
+                            red = 255;
+                         green = Android.Graphics.Color.GetGreenComponent(newColor) + (Android.Graphics.Color.GetGreenComponent(newColor) * 30 / 100);
+                        if (green > 255)
+                            green = 255;
+                        blue = Android.Graphics.Color.GetBlueComponent(newColor) + (Android.Graphics.Color.GetBlueComponent(newColor) * 30 / 100);
+                        if (blue > 255)
+                            blue = 255;
+                        allpixels[i] = Android.Graphics.Color.Argb(alpha, red, green, blue);
+                         Console.WriteLine("color = " + red + " " + green + " " + blue);
+                    }
+                    
+                }
+            }
+            resultBitmap.SetPixels(allpixels, 0, resultBitmap.Width, 0, 0, resultBitmap.Width, resultBitmap.Height);
+            return resultBitmap;
+        }
 
 
         public MyMapRenderer(Context context) : base(context)
         {
-            bmp = BitmapFactory.DecodeResource(Resources, test.Droid.Resource.Drawable.location_icon);
+            bmp = BitmapFactory.DecodeResource(Resources, test.Droid.Resource.Drawable.location_iconFlou1);
             resizedBitmap = Bitmap.CreateScaledBitmap(bmp, 128, 128, false);
+            myPositionIcon = Bitmap.CreateScaledBitmap(resizedBitmap, 128, 128, false);
+            myPositionIcon = changeBitmapIconLocationColor(myPositionIcon, GlobalSingleton.Instance().Perso.Couleur);
+
 
             GlobalSingleton.Instance().Client.NeedRefreshMap += new EventHandler(RefreshPosition);
 
@@ -78,7 +126,7 @@ namespace test.droid
 
                 if (infoTitle != null)
                 {
-                    infoTitle.Text = "Flore est la plus belle de toute! note bien ca khey";
+                    infoTitle.Text = "Flore est la plus belle de toute!";
                     infoTitle.SetTextColor(Android.Graphics.Color.IndianRed);
                 }
 
@@ -181,7 +229,7 @@ namespace test.droid
                    map.AddPolyline(polyline2);*/
 
             }
-            catch(Exception exc) { }
+            catch(Exception exc) { Console.WriteLine(exc); }
 
 
         }
@@ -227,7 +275,14 @@ namespace test.droid
                 else if (MyPin.TypePin == Genre.OWN) // own
                 {
                     CustomMarker.SetPosition(new LatLng(pin.Position.Latitude, pin.Position.Longitude));
-                    CustomMarker.SetIcon(BitmapDescriptorFactory.FromBitmap(resizedBitmap));
+
+                    Bitmap ic = myPositionIcon;
+
+                    CustomMarker.SetIcon(BitmapDescriptorFactory.FromBitmap(ic));
+
+                    Console.WriteLine("-------------------------------------");
+                    Console.WriteLine(MyPin.Address + "    " + MyPin.Label);
+                    Console.WriteLine("-------------------------------------");
                 }
                 else if (MyPin.TypePin == Genre.VISIBLE_REACHPOINT)
                 {
@@ -463,7 +518,7 @@ namespace test.droid
         {
 
             Paint paint = new Paint();
-            String taillePseudoMax = "pseudo";
+            String taillePseudoMax = "nopseudo";
 
             //parametres
             paint.TextSize = 64;

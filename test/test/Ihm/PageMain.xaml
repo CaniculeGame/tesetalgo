@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:test"		
+             x:Class="test.PageMain"
+             Title = "Test - XAML"
+             BackgroundColor="Black">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="plainButton" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="#eee"/>
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="BorderRadius" Value="0"/>
+                <Setter Property="FontSize" Value="12" />
+            </Style>
+            <Style x:Key="darkerButton" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="#ddd"/>
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="BorderRadius" Value="0"/>
+                <Setter Property="FontSize" Value="12" />
+            </Style>
+            <Style x:Key="orangeButton" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="#E8AD00"/>
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BorderRadius" Value="0"/>
+                <Setter Property="FontSize" Value="12" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+
+        <Grid x:Name="mainGrid" ColumnSpacing="0" RowSpacing="0" >
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="ChangeProfil" Text="Mon Profil"  Style="{StaticResource orangeButton}"
+                    Grid.Row="1" Grid.Column="0" Grid.RowSpan="2"/>
+
+            <Button x:Name="Rejoindre" Text="Rejoindre"  Style="{StaticResource orangeButton}"
+                    Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" />
+
+            <Button x:Name="Creer" Text="Heberger"  Style="{StaticResource orangeButton}"
+                    Grid.Row="0" Grid.Column="0"  />
+
+            <Button x:Name="Pub" Text="Pub"   Style="{StaticResource orangeButton}" IsEnabled="False"
+                    Grid.Row="1" Grid.Column="2" />
+
+            <Button x:Name="Credit" Text="Credit"   Style="{StaticResource orangeButton}" IsEnabled="False"
+                    Grid.Row="2" Grid.Column="1" />
+
+            <Button x:Name="Option" Text="Options"   Style="{StaticResource orangeButton}"
+                    Grid.Row="1" Grid.Column="1"/>
+
+            <Button x:Name="Quitter" Text="Quitter"  Style="{StaticResource orangeButton}"
+                    Grid.Row="2" Grid.Column="2" />
+
+        </Grid>
+    </ContentPage.Content>
+ </ContentPage>

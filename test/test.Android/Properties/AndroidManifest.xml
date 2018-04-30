@@ -6,8 +6,11 @@
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
-  <application android:label="test.Android">
-
+  <application android:label="test.Android"
+    android:allowBackup="true"           
+    android:vmSafeMode="true"       
+    android:allowClearUserData="true"
+    android:hardwareAccelerated="true">
     <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBSHCE2ZT8cSwr-4Y7kyOyjwszqXu7sv80" />
     
   </application>

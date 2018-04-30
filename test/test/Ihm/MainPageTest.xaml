@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:test"					
+             x:Class="test.MainPageTest">
+
+
+    <StackLayout BackgroundColor="Black">
+
+        <Label x:Name="LabelIpClient" Text="Addresse  IP du Server a Rejoindre" TextColor="WhiteSmoke" />
+        <Entry x:Name="IpTextClient" Placeholder="entrer ip" TextColor="WhiteSmoke"  PlaceholderColor="Silver"/>
+        <Button x:Name="ClientButton" Text="Rejoindre"/>
+
+
+        <Label x:Name="labelMessageServer" TextColor="Gold" Text="server"/>
+        <Label x:Name="LabelMessageClient" TextColor="HotPink" Text="client"/>
+
+        <BoxView   
+           x:Name="Box0"
+           VerticalOptions="Center"
+           HorizontalOptions="Center"
+           HeightRequest="10"
+           WidthRequest="2000"  
+           Color="#5b5d68"/>
+
+    </StackLayout>
+    
+</ContentPage>

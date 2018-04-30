@@ -112,6 +112,12 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\flag.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\location_iconFlou.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\location_iconFlou1.png" />
+  </ItemGroup>
   <Import Project="..\test\test.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

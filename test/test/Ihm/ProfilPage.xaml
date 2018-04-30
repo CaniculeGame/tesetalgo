@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:test"
+             x:Class="test.ProfilPage"
+             BackgroundColor="Black"
+             Title="Mon Profil" 
+             >
+    
+    <ContentPage.Content >
+
+        <Grid ColumnSpacing="0" RowSpacing="0" x:Name="gridProfil">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Label x:Name="profilInfo"  TextColor="WhiteSmoke"  Text="Hop hop hop c 'est l heure de faire son propfil" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8"/>
+
+
+            <BoxView   
+               x:Name="Box"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               HeightRequest="10"
+               WidthRequest="2000"  
+               Color="#5b5d68"
+                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="8"/>
+
+
+            <Label x:Name="pseudoLabel"  TextColor="WhiteSmoke"  Text="Choisi ton pseudo" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="8"/>
+            <Entry x:Name="pseudo" TextColor="AntiqueWhite" Placeholder="Entrer pseudo" PlaceholderColor="Silver" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="8"/>
+
+            <BoxView   
+               x:Name="Box1"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               HeightRequest="10"
+               WidthRequest="2000"  
+               Color="#5b5d68"
+               Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="8"/>
+
+
+            <Label x:Name="choixCouleurLabel"  TextColor="WhiteSmoke"  Text="Choisie ta couleur" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="8"/>
+
+
+            <Button x:Name="button0" Text="" Grid.Row="6" Grid.Column="0" BackgroundColor="#ffb900" BorderColor="#ffb900"  TextColor="#ffb900" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button1" Text="" Grid.Row="6" Grid.Column="1" BackgroundColor="#ff8c00" BorderColor="#ff8c00"  TextColor="#ff8c00" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button2" Text="" Grid.Row="6" Grid.Column="2" BackgroundColor="#f7630c" BorderColor="#f7630c" TextColor="#f7630c" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button3" Text="" Grid.Row="6" Grid.Column="3" BackgroundColor="#ca5010" BorderColor="#ca5010"  TextColor="#ca5010" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button4" Text="" Grid.Row="6" Grid.Column="4" BackgroundColor="#da3b01" BorderColor="#da3b01"  TextColor="#da3b01" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button5" Text="" Grid.Row="6" Grid.Column="5" BackgroundColor="#e74856" BorderColor="#e74856"  TextColor="#e74856" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button6" Text="" Grid.Row="6" Grid.Column="6" BackgroundColor="#e81123" BorderColor="#e81123"  TextColor="#e81123" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button7" Text="" Grid.Row="6" Grid.Column="7" BackgroundColor="#ea005e" BorderColor="#ea005e"  TextColor="#ea005e" Clicked="OnColorClicked" BorderWidth="3"/>
+
+            <Button x:Name="button8" Text="" Grid.Row="7" Grid.Column="0" BackgroundColor="#c30052" BorderColor="#c30052"  TextColor="#c30052"  Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button9" Text="" Grid.Row="7" Grid.Column="1" BackgroundColor="#e3008c" BorderColor="#e3008c"  TextColor="#e3008c" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button10" Text="" Grid.Row="7" Grid.Column="2" BackgroundColor="#9a0089" BorderColor="#9a0089" TextColor="#9a0089" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button11" Text="" Grid.Row="7" Grid.Column="3" BackgroundColor="#881798" BorderColor="#881798"  TextColor="#881798" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button12" Text="" Grid.Row="7" Grid.Column="4" BackgroundColor="#744da9" BorderColor="#744da9"  TextColor="#744da9" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button13" Text="" Grid.Row="7" Grid.Column="5" BackgroundColor="#6b69d6" BorderColor="#6b69d6"  TextColor="#6b69d6" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button14" Text="" Grid.Row="7" Grid.Column="6" BackgroundColor="#0063b1" BorderColor="#0063b1"  TextColor="#0063b1" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button15" Text="" Grid.Row="7" Grid.Column="7" BackgroundColor="#0078d7" BorderColor="#0078d7"  TextColor="#0078d7" Clicked="OnColorClicked" BorderWidth="3"/>
+
+            <Button x:Name="button16" Text="" Grid.Row="8" Grid.Column="0" BackgroundColor="#2d7d9a" BorderColor="#2d7d9a"  TextColor="#2d7d9a" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button17" Text="" Grid.Row="8" Grid.Column="1" BackgroundColor="#00b7c3" BorderColor="#00b7c3"  TextColor="#00b7c3" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button18" Text="" Grid.Row="8" Grid.Column="2" BackgroundColor="#038387" BorderColor="#038387"  TextColor="#038387" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button19" Text="" Grid.Row="8" Grid.Column="3" BackgroundColor="#00cc6a" BorderColor="#00cc6a"  TextColor="#00cc6a" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button20" Text="" Grid.Row="8" Grid.Column="4" BackgroundColor="#10893e" BorderColor="#10893e"  TextColor="#10893e" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button21" Text="" Grid.Row="8" Grid.Column="5" BackgroundColor="#107c10" BorderColor="#107c10"  TextColor="#107c10" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button22" Text="" Grid.Row="8" Grid.Column="6" BackgroundColor="#847545" BorderColor="#847545"  TextColor="#847545" Clicked="OnColorClicked" BorderWidth="3"/>
+            <Button x:Name="button23" Text="" Grid.Row="8" Grid.Column="7" BackgroundColor="#7e735f" BorderColor="#7e735f"  TextColor="#7e735f" Clicked="OnColorClicked" BorderWidth="3"/>
+
+            <Label x:Name="blank" Text="" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="8" />
+
+        </Grid>
+        
+    </ContentPage.Content>
+</ContentPage>

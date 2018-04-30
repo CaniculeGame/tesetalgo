@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:test"
+             x:Class="test.MakePage"
+             BackgroundColor="Black"
+             Title="Creer" >
+
+    <ContentPage.Content >
+
+        <StackLayout>
+
+            <Label x:Name="LabelIpServer" Text="Addresse  IP de ton Server a Communiquer aux autre" TextColor="WhiteSmoke" />
+            <Label x:Name="IpServer" TextColor="WhiteSmoke" FontSize="16" />
+            <Label/>
+
+            <BoxView   
+               x:Name="BoxMakePage0"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               HeightRequest="10"
+               WidthRequest="2000"  
+               Color="#5b5d68"/>
+
+            <Label x:Name="ChoixMapOuPlan" Text="Veux-tu partager les positions sur un plan ou une carte satelitte?"  TextColor="WhiteSmoke"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+
+            
+            <Grid ColumnSpacing="1" RowSpacing="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="ButtonPlan" Image="" Grid.Row="0" Grid.Column="0" Clicked="OnButtonImageClicked" BorderWidth="5" HeightRequest="128"/>
+                <Button x:Name="ButtonCarte" Image="" Grid.Row="0" Grid.Column="1" Clicked="OnButtonCarteClicked" BorderWidth="5" HeightRequest="128"/>
+
+                <Label x:Name="LabelPlan" Text="Plan" Grid.Row="1" Grid.Column="0"  TextColor="WhiteSmoke" HorizontalTextAlignment="Center"/>
+                <Label x:Name="LabelCarte" Text="Carte" Grid.Row="1" Grid.Column="1"  TextColor="WhiteSmoke" HorizontalTextAlignment="Center"/>
+                
+            </Grid>
+
+            <BoxView   
+               x:Name="BoxMakePage1"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               HeightRequest="10"
+               WidthRequest="2000"  
+               Color="#5b5d68"/>
+
+
+            <Button x:Name="NextButton" Text="Creer"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

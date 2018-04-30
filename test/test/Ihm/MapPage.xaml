@@ -8,8 +8,24 @@
         <StackLayout BackgroundColor="Black">
             <Label x:Name="MyLabel" Text="Ca marche !!" HorizontalTextAlignment="Center"/>
 
+
+            <BoxView   
+               x:Name="Box0"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               HeightRequest="10"
+               WidthRequest="2000"  
+               Color="#5b5d68"></BoxView>
+
             <local:CustomMap x:Name="MyMap" MapType="Street"/>
 
+            <BoxView   
+               x:Name="Box1"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               HeightRequest="10"
+               WidthRequest="2000"  
+               Color="#5b5d68"></BoxView>
             <Button x:Name="MyReinitButton" Text="Recentrer"/>
 
         </StackLayout>

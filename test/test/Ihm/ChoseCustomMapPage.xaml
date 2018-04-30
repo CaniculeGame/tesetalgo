@@ -1,0 +1,27 @@
+﻿<CarouselPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class=".ChoseCustomMapPage"
+    xmlns:local="clr-namespace:test">
+
+    <ContentPage>
+        <StackLayout>
+            <Label Text="Red" />
+            <BoxView Color="Red" VerticalOptions="FillAndExpand" />
+        </StackLayout>
+    </ContentPage>
+    <ContentPage>
+        <StackLayout>
+            <Label Text="Green" />
+            <BoxView Color="Green" VerticalOptions="FillAndExpand" />
+        </StackLayout>
+    </ContentPage>
+    <ContentPage>
+        <StackLayout>
+            <Label Text="Blue" />
+            <BoxView Color="Blue" VerticalOptions="FillAndExpand" />
+        </StackLayout>
+    </ContentPage>
+
+
+</CarouselPage>

@@ -16,14 +16,16 @@ using System.Diagnostics;
 namespace test
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MainPage : ContentPage
+    public partial class MainPageTest : ContentPage
     {
 
         test.GlobalSingleton labelGlobalInstance = null;
 
         IPAddress[] address;
 
-        public MainPage()
+
+
+        public MainPageTest()
         {
             InitializeComponent();
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// Partie map test
@@ -146,7 +148,7 @@ namespace test
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Partie client server test
 
             address = Dns.GetHostAddresses(Dns.GetHostName());
-            IpTextServer.Text = address[0].ToString();
+           // IpTextServer.Text = address[0].ToString();
             Console.WriteLine(address[0].ToString());
 
             var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
@@ -157,11 +159,10 @@ namespace test
             labelGlobalInstance = GlobalSingleton.Instance();
             GlobalSingleton.Instance().RefreshThread = new Thread(Refresh);
             GlobalSingleton.Instance().RefreshThread.Start();
-            ServerButton.Clicked += OnButtonServerClicked;
             ClientButton.Clicked += OnButtonClientClicked;
 
             GlobalSingleton.Instance().ButtonClientLabel = ClientButton.Text;
-            GlobalSingleton.Instance().ButtonServerLabel = ServerButton.Text;
+            Box0.Color = GlobalSingleton.Instance().Perso.Couleur;
 
         }
 
@@ -182,7 +183,7 @@ namespace test
                         LabelMessageClient.Text = GlobalSingleton.Instance().LabelClient;
                         labelMessageServer.Text = GlobalSingleton.Instance().LabelServer;
                         ClientButton.Text = GlobalSingleton.Instance().ButtonClientLabel;
-                        ServerButton.Text = GlobalSingleton.Instance().ButtonServerLabel;
+                      //  ServerButton.Text = GlobalSingleton.Instance().ButtonServerLabel;
 
 
                         //si on est co on chage de page
@@ -202,13 +203,22 @@ namespace test
                     Thread.Sleep(33);
                 }
             }
+
+            Console.WriteLine("FIN THREAD MAJ et changement d ecran");
+        }
+
+        protected override void OnAppearing()
+        {
+            //deconnexion
+            GlobalSingleton.Instance().Page2 = false;
+            Box0.Color = GlobalSingleton.Instance().Perso.Couleur;
         }
 
         private void OnButtonServerClicked(object sender, EventArgs e)
         {
-            if (pseudo.Text != null && pseudo.Text != "")
+           /* if (pseudo.Text != null && pseudo.Text != "")
                 GlobalSingleton.Instance().Perso.Pseudo = pseudo.Text;
-            else 
+            else */
                 GlobalSingleton.Instance().Perso.Pseudo = "NoPseudo";
 
             if (GlobalSingleton.Instance().Server == null)
@@ -232,9 +242,9 @@ namespace test
 
         private void OnButtonClientClicked(object sender, EventArgs e)
         {
-            if (pseudo.Text != null && pseudo.Text != "")
+            /*if (pseudo.Text != null && pseudo.Text != "")
                 GlobalSingleton.Instance().Perso.Pseudo = pseudo.Text;
-            else
+            else*/
                 GlobalSingleton.Instance().Perso.Pseudo = "NoPseudo";
 
             if (GlobalSingleton.Instance().Client == null && IpTextClient.Text != null)
@@ -263,20 +273,10 @@ namespace test
                     GlobalSingleton.Instance().Perso.Couleur = button.TextColor;
                 }
 
-                button0.BorderColor = Color.Red;
-                button1.BorderColor = Color.Pink;
-                button2.BorderColor = Color.Violet;
-                button3.BorderColor = Color.Blue;
-                button4.BorderColor = Color.Green;
-                button5.BorderColor = Color.Yellow;
-                button6.BorderColor = Color.Orange;
-                button7.BorderColor = Color.OrangeRed;
-
                 button.BorderColor = Color.AntiqueWhite;
                 button.BorderWidth = 2;
 
                 Box0.Color = button.BackgroundColor;
-                Box1.Color = button.BackgroundColor;
 
             }
 

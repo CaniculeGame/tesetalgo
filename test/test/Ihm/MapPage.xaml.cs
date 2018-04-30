@@ -33,14 +33,15 @@ namespace test
             {
                 Type = PinType.Generic,
                 Position = MyPosition,
-                Label = "Xamarin San Francisco Office",
-                Address = "394 Pacific Ave, San Francisco CA",
-                Id = "0",
+                Label = GlobalSingleton.Instance().Perso.Pseudo,
+                Address = EncodeDecode.GetHexString(GlobalSingleton.Instance().Perso.Couleur),
+                Id = GlobalSingleton.Instance().Perso.ID,
                 Dist = 0,
                 TypePin = Genre.OWN
             };
 
-
+            Box0.Color = GlobalSingleton.Instance().Perso.Couleur;
+            Box1.Color = GlobalSingleton.Instance().Perso.Couleur;
             MyMap.Pins.Add(MyPin);
  
             MyMap.MoveToRegion(MapSpan.FromCenterAndRadius(MyPosition, Distance.FromMeters(FirstSliderZoom)));
@@ -59,8 +60,11 @@ namespace test
 
         public  void ReCentrerPosition(object sender, EventArgs e)
         {
-            if(MyMap != null)
-                MyMap.MoveToRegion(MapSpan.FromCenterAndRadius(MapInfoSingleton.Instance().GetPosition(),mapInfo.MapSpan.Radius));
+            try
+            { 
+            if (MyMap != null)
+                    MyMap.MoveToRegion(MapSpan.FromCenterAndRadius(MapInfoSingleton.Instance().GetPosition(), mapInfo.MapSpan.Radius));
+            }catch(Exception exc) { Console.WriteLine(exc); }
         }
 
         protected override void OnDisappearing()

@@ -8,7 +8,7 @@ namespace test
 {
     class CustomPin : Pin
     {
-        Position carte;
+        //Position carte;
 
 
         public Genre TypePin { get; set; }
