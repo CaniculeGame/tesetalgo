@@ -35,8 +35,8 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="ButtonPlan" Image="" Grid.Row="0" Grid.Column="0" Clicked="OnButtonImageClicked" BorderWidth="5" HeightRequest="128"/>
-                <Button x:Name="ButtonCarte" Image="" Grid.Row="0" Grid.Column="1" Clicked="OnButtonCarteClicked" BorderWidth="5" HeightRequest="128"/>
+                <Button x:Name="ButtonPlan"  Grid.Row="0" Grid.Column="0" Clicked="OnButtonImageClicked" BorderWidth="5" HeightRequest="128" Image="blueprint.png"/>
+                <Button x:Name="ButtonCarte"  Grid.Row="0" Grid.Column="1" Clicked="OnButtonCarteClicked" BorderWidth="5" HeightRequest="128" Image="mapMini.png"/>
 
                 <Label x:Name="LabelPlan" Text="Plan" Grid.Row="1" Grid.Column="0"  TextColor="WhiteSmoke" HorizontalTextAlignment="Center"/>
                 <Label x:Name="LabelCarte" Text="Carte" Grid.Row="1" Grid.Column="1"  TextColor="WhiteSmoke" HorizontalTextAlignment="Center"/>
