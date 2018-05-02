@@ -2,12 +2,91 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:test"
-             x:Class="test.OptionPage">
+             x:Class="test.OptionPage"
+             BackgroundColor="Black"
+             Title="Options">
+
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label x:Name="labelOption" Text="Bienvenue dans les options: Fait tes choix" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" TextColor="WhiteSmoke" VerticalTextAlignment="Center"/>
+
+            <BoxView   
+               x:Name="Box0"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               HeightRequest="10"
+               WidthRequest="2000"  
+               Color="#5b5d68"
+               Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+
+            <Image x:Name="CheckBoxNotifButton"  Grid.Row="2" Grid.Column="0"  Source="off.png" >
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="OnCheckBoxNotifClicked" NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
+            </Image>
+
+
+            <Label x:Name="checkBoxNotifLabel" Text="Notification" Grid.Row="2" Grid.Column="1"  Grid.ColumnSpan="2" TextColor="WhiteSmoke" VerticalTextAlignment="Center" />
+
+
+            <Image x:Name="CheckBoxSonButton"  Grid.Row="3" Grid.Column="0" Source="off.png">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="OnCheckBoxSonClicked" NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Label x:Name="checkBoxSonLabel" Text="Jouer les sons" Grid.Row="3" Grid.Column="1"  Grid.ColumnSpan="2" TextColor="WhiteSmoke" VerticalTextAlignment="Center"/>
+
+
+            <BoxView   
+               x:Name="Box1"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               HeightRequest="10"
+               WidthRequest="2000"  
+               Color="#5b5d68"
+               Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"/>
+
+            <Label Text="Choisi ta langue:" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" TextColor="WhiteSmoke" VerticalTextAlignment="Center"/>
+
+            <Image x:Name="PaysButton0" Source="allemagne.png"  Grid.Row="6" Grid.Column="0" >
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="OnPaysALLClicked" NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Image x:Name="PaysButton1" Source="france.png"  Grid.Row="6" Grid.Column="1" >
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="OnPaysFRClicked" NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
+            </Image>
+            <Image x:Name="PaysButton2" Source="usa.png"  Grid.Row="6" Grid.Column="2" >
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Tapped="OnPaysUSAClicked" NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
+            </Image>
+
+            <!--<Label x:Name="langueChosieLabel" Text="Ton choix : " Grid.Row="7" Grid.Column="0" TextColor="WhiteSmoke"/>
+            <Label x:Name="langueChoisie" Text="France" Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="1"  TextColor="WhiteSmoke" HorizontalTextAlignment="Start"/>-->
+            <Label Text="" Grid.Row="7" Grid.Column="0"/>
+            
+
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
